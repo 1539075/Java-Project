@@ -1,0 +1,57 @@
+@startuml
+
+interface SearchStrategy {
+    +search(products: Collection<Product>): Iterator<Product>
+}
+
+interface Iterator<T> {
+    +hasNext(): boolean
+    +next(): T
+}
+
+class BrowseCatalogControl {
+    +browseCatalog(): void
+    +setSearchStrategy(s: SearchStrategy): void
+    +search(): Iterator<Product>
+}
+
+class Catalog {
+    +addProduct(p: Product): void
+    +getProducts(): Collection<Product>
+}
+
+class Product {
+    -id: int
+    -name: String
+    -category: int
+    -price: float
+    -quantity: int
+    --
+    +getId(): int
+    +getName(): String
+    +getCategory(): int
+    +getPrice(): float
+    +getQuantity(): int
+}
+
+class FindByName {
+    +search(products): Iterator<Product>
+}
+
+class FindByPrice {
+    +search(products): Iterator<Product>
+}
+
+class FindByCategory {
+    +search(products): Iterator<Product>
+}
+
+BrowseCatalogControl --> Catalog : uses
+Catalog "1" --> "*" Product : contains
+BrowseCatalogControl --> SearchStrategy : uses
+SearchStrategy <|.. FindByName
+SearchStrategy <|.. FindByPrice
+SearchStrategy <|.. FindByCategory
+SearchStrategy --> Iterator : returns
+
+@enduml
